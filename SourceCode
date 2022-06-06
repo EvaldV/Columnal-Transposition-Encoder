@@ -1,0 +1,83 @@
+import math
+def char_split(s):
+    return [ch for ch in s] # Found this on stack overflow
+
+def columnalEncrypt():
+  key = input("Key (All LowerCase): ")
+  code = input("Input: ")
+
+  rows = len(code) / len(key)
+  rows = math.ceil(rows)
+
+  splitChar = char_split(key)
+  inputSplit = char_split(code)
+
+  rowArray = ["#"]*rows
+  loop = 0
+  while loop < len(rowArray):
+    rowArray[loop] = [" "]*len(key)
+    loop += 1
+
+  # Splits the Input into "Rows"
+  charLoop = 0
+  colSelect = 0
+  rowSelect = 0
+  while charLoop < len(inputSplit):
+    rowArray[rowSelect][colSelect] = inputSplit[charLoop]
+    if colSelect == len(splitChar) - 1:
+      rowSelect += 1
+      colSelect = -1
+    if rowSelect > rows:
+      break
+    colSelect += 1
+    charLoop += 1
+  
+  colArray = ["#"]*len(key)
+  loop = 0
+  while loop < len(colArray):
+    colArray[loop] = [" "]*(rows + 1)
+    loop += 1
+
+  # Uses the rows to find the columns
+  rowCounter = 1 
+  colCounter = 0
+  rowSelecter = 0
+  arrSelecter = 0
+
+  colLoop = 0
+  while colLoop < len(inputSplit):
+    colArray[colCounter][rowCounter] = rowArray[rowSelecter][arrSelecter]
+    rowCounter += 1
+    rowSelecter += 1
+    if rowSelecter == rows:
+      rowCounter = 1
+      colCounter += 1
+      arrSelecter += 1
+      rowSelecter = 0
+    colLoop += 1
+
+  # printing the final message
+
+  # Adds the key to the front of the array to be able to alphabetically sort it
+  sortLoop = 0
+  while sortLoop < len(key):
+      colArray[sortLoop][0] = splitChar[sortLoop]
+      colArray[sortLoop] = ''.join(colArray[sortLoop])
+      sortLoop += 1
+
+  colArray.sort()
+
+  # Removes the key from the arrays
+  splitLoop = 0
+  while splitLoop < len(key):
+      colArray[splitLoop] = char_split(colArray[splitLoop])
+      colArray[splitLoop].pop(0)
+      colArray[splitLoop] = ''.join(colArray[splitLoop])
+      splitLoop += 1
+
+  finalOutput = ''.join(colArray)
+
+  print("")
+  print("Encrpyted Output:",finalOutput)
+
+columnalEncrypt()
